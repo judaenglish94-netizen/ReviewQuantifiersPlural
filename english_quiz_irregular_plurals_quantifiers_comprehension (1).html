@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Master Quiz: Plurals, Quantifiers & Comprehension</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.3);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
+
+    <!-- Header Navigation -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <button id="toggle-sidebar-btn" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <span class="bg-brand-600 text-white font-bold px-2.5 py-1 rounded-md text-xs tracking-wider uppercase">High School A2-B2</span>
+                    <h1 class="text-lg font-bold text-slate-900 dark:text-white hidden sm:block">English Mastery Assessment (40 Qs)</h1>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="flex-1 max-w-7xl w-full mx-auto flex overflow-hidden">
+        
+        <!-- Collapsible Sidebar Menu -->
+        <aside id="sidebar" class="w-72 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col transition-all duration-300 flex-shrink-0 z-20">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                <h2 class="font-bold text-sm text-slate-700 dark:text-slate-200 uppercase tracking-wider">Question Navigator</h2>
+                <span id="progress-text" class="text-xs font-medium text-brand-600 dark:text-brand-400">0 / 40 Answered</span>
+            </div>
+            
+            <div class="p-4 overflow-y-auto custom-scrollbar flex-1">
+                <!-- Category Section: Reading -->
+                <div class="mb-4">
+                    <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">Part I: Reading (1–5)</span>
+                    <div class="grid grid-cols-5 gap-2" id="grid-part-1"></div>
+                </div>
+
+                <!-- Category Section: Plurals -->
+                <div class="mb-4">
+                    <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">Part II: Plurals (6–25)</span>
+                    <div class="grid grid-cols-5 gap-2" id="grid-part-2"></div>
+                </div>
+
+                <!-- Category Section: Quantifiers -->
+                <div class="mb-4">
+                    <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">Part III: Quantifiers (26–40)</span>
+                    <div class="grid grid-cols-5 gap-2" id="grid-part-3"></div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+                <button id="finish-quiz-btn" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-sm text-sm transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-flag-checkered"></i>
+                    <span>Submit & See Report</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 bg-slate-50 dark:bg-slate-900 flex flex-col justify-between">
+            
+            <div id="quiz-view" class="max-w-3xl mx-auto w-full">
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-6 overflow-hidden">
+                    <div id="main-progress-bar" class="bg-brand-600 h-2 rounded-full transition-all duration-300" style="width: 2.5%;"></div>
+                </div>
+
+                <!-- FIXED READING STORY CONTAINER (Visible for Questions 1 to 5) -->
+                <div id="reading-story-box" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-emerald-300 dark:border-emerald-800/60 p-5 mb-6 transition-all duration-200">
+                    <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-book-open text-emerald-600 dark:text-emerald-400"></i>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Reference Reading: A Busy Saturday in the Valley</h3>
+                        </div>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-semibold">
+                            Scrollable Text
+                        </span>
+                    </div>
+                    
+                    <!-- Scrollable Story Content Container -->
+                    <div class="max-h-[220px] overflow-y-auto custom-scrollbar pr-3 space-y-3 text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        <p>
+                            On sunny autumn mornings, many <strong class="text-brand-600 dark:text-brand-400">people</strong> leave the busy city center to enjoy quiet moments in the mountain valley. Groups of young <strong class="text-brand-600 dark:text-brand-400">men</strong> and <strong class="text-brand-600 dark:text-brand-400">women</strong> walk together along the rustic wooden bridges, carrying heavy <strong class="text-brand-600 dark:text-brand-400">backpacks</strong> filled with fresh <strong class="text-brand-600 dark:text-brand-400">apples</strong> and cold <strong class="text-brand-600 dark:text-brand-400">drinks</strong>. Families bring their energetic <strong class="text-brand-600 dark:text-brand-400">children</strong>, who run through the tall green <strong class="text-brand-600 dark:text-brand-400">grass</strong> and collect colorful falling <strong class="text-brand-600 dark:text-brand-400">leaves</strong> under the ancient <strong class="text-brand-600 dark:text-brand-400">trees</strong>. Near the cold <strong class="text-brand-600 dark:text-brand-400">rivers</strong>, small gray <strong class="text-brand-600 dark:text-brand-400">mice</strong> hide inside hollow logs while wild <strong class="text-brand-600 dark:text-brand-400">wolves</strong> watch quietly from high up on the rocky <strong class="text-brand-600 dark:text-brand-400">hills</strong>.
+                        </p>
+                        <p>
+                            Local <strong class="text-brand-600 dark:text-brand-400">farmers</strong> work hard every day near their large <strong class="text-brand-600 dark:text-brand-400">barns</strong> to protect their quiet farm <strong class="text-brand-600 dark:text-brand-400">animals</strong>. A farmer checks his white <strong class="text-brand-600 dark:text-brand-400">sheep</strong> standing near the wooden <strong class="text-brand-600 dark:text-brand-400">fences</strong> and feeds the noisy <strong class="text-brand-600 dark:text-brand-400">geese</strong> splashing in the muddy <strong class="text-brand-600 dark:text-brand-400">ponds</strong>. His tired <strong class="text-brand-600 dark:text-brand-400">feet</strong> hurt after working many <strong class="text-brand-600 dark:text-brand-400">hours</strong> on the farm, but he always takes good care of his <strong class="text-brand-600 dark:text-brand-400">animals</strong>. He carefully sharpens heavy metal <strong class="text-brand-600 dark:text-brand-400">knives</strong> to cut fresh bread and vegetables, preparing a warm <strong class="text-brand-600 dark:text-brand-400">meal</strong> for his big <strong class="text-brand-600 dark:text-brand-400">family</strong> after a long <strong class="text-brand-600 dark:text-brand-400">day</strong>.
+                        </p>
+                        <p>
+                            In the clean blue water of the river, silver <strong class="text-brand-600 dark:text-brand-400">fish</strong> swim quickly past bright green <strong class="text-brand-600 dark:text-brand-400">plants</strong> and smooth <strong class="text-brand-600 dark:text-brand-400">stones</strong>. Young <strong class="text-brand-600 dark:text-brand-400">tourists</strong> love taking beautiful <strong class="text-brand-600 dark:text-brand-400">photos</strong> of the natural scenery while keeping their cameras completely steady with both <strong class="text-brand-600 dark:text-brand-400">hands</strong>. Some <strong class="text-brand-600 dark:text-brand-400">visitors</strong> sit quietly on wide stone <strong class="text-brand-600 dark:text-brand-400">benches</strong>, smiling and showing their white <strong class="text-brand-600 dark:text-brand-400">teeth</strong> while talking about their pleasant <strong class="text-brand-600 dark:text-brand-400">lives</strong> in the countryside. As the sun sets behind the dark <strong class="text-brand-600 dark:text-brand-400">mountains</strong>, all the <strong class="text-brand-600 dark:text-brand-400">travelers</strong> head back to their cozy <strong class="text-brand-600 dark:text-brand-400">cabins</strong>, happy to spend another wonderful <strong class="text-brand-600 dark:text-brand-400">weekend</strong> surrounded by peaceful nature.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Quiz Card Container -->
+                <div id="quiz-card" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sm:p-8 mb-6">
+                    
+                    <!-- Question Header Info -->
+                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <div class="flex items-center space-x-2">
+                            <span id="question-badge" class="px-3 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 rounded-full text-xs font-semibold">
+                                Question 1
+                            </span>
+                            <span id="topic-badge" class="px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full text-xs font-medium">
+                                Reading Comprehension
+                            </span>
+                        </div>
+                        <span id="bloom-badge" class="text-xs italic text-slate-400 dark:text-slate-500">
+                            Analysis Level
+                        </span>
+                    </div>
+
+                    <!-- Context Box / Dialogue -->
+                    <div id="context-box" class="mb-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 text-sm leading-relaxed hidden">
+                    </div>
+
+                    <!-- Question Text -->
+                    <h2 id="question-text" class="text-base sm:text-lg font-semibold text-slate-900 dark:text-white mb-6 leading-snug">
+                        Loading question...
+                    </h2>
+
+                    <!-- Options Container -->
+                    <div id="options-container" class="space-y-3 mb-6">
+                    </div>
+
+                    <!-- Feedback Box -->
+                    <div id="feedback-box" class="p-4 rounded-xl hidden transition-all duration-200 mb-2">
+                        <div class="flex items-start space-x-3">
+                            <i id="feedback-icon" class="fa-solid text-xl mt-0.5"></i>
+                            <div>
+                                <h4 id="feedback-title" class="font-bold text-sm mb-1">Feedback</h4>
+                                <p id="feedback-message" class="text-xs sm:text-sm leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Action Buttons (Strictly ordered: Next, Check, Previous) -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3 w-full sm:w-auto order-2 sm:order-1">
+                        <!-- NEXT BUTTON -->
+                        <button id="next-btn" class="flex-1 sm:flex-initial px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-xl shadow-sm text-sm transition flex items-center justify-center space-x-2">
+                            <span>Next</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                        <!-- CHECK BUTTON -->
+                        <button id="check-btn" class="flex-1 sm:flex-initial px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl shadow-sm text-sm transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Check</span>
+                        </button>
+                    </div>
+
+                    <!-- PREVIOUS BUTTON -->
+                    <button id="prev-btn" class="w-full sm:w-auto px-5 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition flex items-center justify-center space-x-2 order-1 sm:order-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Previous</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report Screen (Hidden by default) -->
+            <div id="report-screen" class="hidden max-w-4xl mx-auto w-full">
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Quiz Questions Data Structure (40 Questions Total)
+        const quizData = [
+            // PART I: READING COMPREHENSION (Higher-order Bloom's Taxonomy)
+            {
+                id: 1,
+                part: "Part I",
+                topic: "Reading Comprehension",
+                bloom: "Analysis & Inference",
+                context: "Based on Paragraph 1 of the story",
+                question: "Which statement best synthesizes the primary reason city dwellers travel to the mountain valley on autumn mornings?",
+                options: [
+                    "A) They intend to assist local farmers with harvesting fresh apples and feeding farm animals.",
+                    "B) They are seeking temporary relief and tranquility away from the urban environment.",
+                    "C) They wish to engage in wildlife research by photographing rare wolves and river fish.",
+                    "D) They are attending an organized autumn festival near the countryside cabins.",
+                    "E) They want to buy wooden furniture made by local craftsmen near the bridges."
+                ],
+                correct: 1, // B
+                explanation: "Paragraph 1 explicitly states that people leave the busy city center 'to enjoy quiet moments in the mountain valley.' Options A, C, D, and E are unsupported inferences or distractors."
+            },
+            {
+                id: 2,
+                part: "Part I",
+                topic: "Reading Comprehension",
+                bloom: "Evaluation",
+                context: "Based on Paragraph 2 of the story",
+                question: "What can be logically inferred about the routine and character of the local farmer described in the text?",
+                options: [
+                    "A) He neglects his livestock due to physical exhaustion and sore feet.",
+                    "B) He relies exclusively on automated machinery to feed his farm animals.",
+                    "C) He shows dedication to his duties and family despite experiencing physical fatigue.",
+                    "D) He spends most of his day relaxing near the muddy ponds with tourists.",
+                    "E) He prefers selling knives in the city over working on his farm."
+                ],
+                correct: 2, // C
+                explanation: "The text highlights that although his 'tired feet hurt after working many hours,' he 'always takes good care of his animals' and prepares a warm meal for his family, showing perseverance and care."
+            },
+            {
+                id: 3,
+                part: "Part I",
+                topic: "Reading Comprehension",
+                bloom: "Text Structure & Tone",
+                context: "Based on the entire story",
+                question: "What overall atmosphere or tone does the author establish through the descriptions in Paragraphs 1, 2, and 3?",
+                options: [
+                    "A) Tense and mysterious, warning visitors about wild predators.",
+                    "B) Melancholic and critical of modern urbanization.",
+                    "C) Serene, harmonious, and appreciative of nature and rural routines.",
+                    "D) Energetic and competitive, encouraging outdoor extreme sports.",
+                    "E) Humorous and playful regarding rural farm life."
+                ],
+                correct: 2, // C
+                explanation: "Descriptions such as 'quiet moments,' 'peaceful nature,' 'pleasant lives,' and 'cozy cabins' combine to create a serene, harmonious, and appreciative atmosphere."
+            },
+            {
+                id: 4,
+                part: "Part I",
+                topic: "Reading Comprehension",
+                bloom: "Inference & Distractor Analysis",
+                context: "Based on Paragraph 1 and 3 of the story",
+                question: "Which detail from the text implies that wildlife and humans coexist in close proximity in the valley?",
+                options: [
+                    "A) Children feed the wild wolves while walking across rustic wooden bridges.",
+                    "B) Tourists catch silver fish with their bare hands in the clean river.",
+                    "C) Visitors feed mice inside hollow logs during their morning walk.",
+                    "D) Mice and wolves carry on their natural behaviors nearby as visitors explore the valley.",
+                    "E) Local farmers train geese to guide travelers back to their cozy cabins."
+                ],
+                correct: 3, // D
+                explanation: "Paragraph 1 notes that while families walk and collect leaves, small mice hide in hollow logs and wolves watch quietly from high hills nearby, showing natural proximity without direct human interaction."
+            },
+            {
+                id: 5,
+                part: "Part I",
+                topic: "Reading Comprehension",
+                bloom: "Author's Purpose",
+                context: "Based on Paragraph 3 of the story",
+                question: "Why does the author explicitly mention details such as 'smiling and showing their white teeth' and 'talking about their pleasant lives'?",
+                options: [
+                    "A) To demonstrate the health benefits of clean mountain water on dental hygiene.",
+                    "B) To reinforce the idea that the countryside environment fosters happiness and well-being.",
+                    "C) To contrast the wealthy tourists with the struggling local farmers.",
+                    "D) To explain why visitors prefer taking close-up portrait photos.",
+                    "E) To suggest that city people rarely talk to each other unless they are on vacation."
+                ],
+                correct: 1, // B
+                explanation: "These physical and emotional expressions emphasize the inner contentment and positive emotional state experienced by individuals spending time in the peaceful valley."
+            },
+
+            // PART II: GRAMMAR - IRREGULAR & REGULAR PLURALS IN CONTEXT (20 Questions: Q6 - Q25)
+            {
+                id: 6,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Dialogue",
+                context: "Dialogue at a community meeting:<br><strong>Elena:</strong> 'Did you see how many _____ attended the town hall event yesterday?'<br><strong>Mark:</strong> 'Yes, over two hundred citizens came to voice their opinions!'",
+                question: "Choose the correct plural form to complete Elena's question:",
+                options: [
+                    "A) persons",
+                    "B) peoples",
+                    "C) people",
+                    "D) persones",
+                    "E) peopless"
+                ],
+                correct: 2, // C
+                explanation: "'People' is the standard irregular plural form of 'person' when referring to a group of human beings."
+            },
+            {
+                id: 7,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Contextual Grammar",
+                context: "Short Scenario:<br>At the construction site, three experienced _____ and four skilled _____ were working together to install the new steel framework for the building.",
+                question: "Select the option that correctly completes both blanks with irregular plurals:",
+                options: [
+                    "A) mans / womans",
+                    "B) men / women",
+                    "C) mens / womens",
+                    "D) man / woman",
+                    "E) menes / womenes"
+                ],
+                correct: 1, // B
+                explanation: "The irregular plural of 'man' is 'men', and the irregular plural of 'woman' is 'women'."
+            },
+            {
+                id: 8,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Short Dialogue:<br><strong>Teacher:</strong> 'Please make sure all the _____ line up quietly before going to the playground.'<br><strong>Assistant:</strong> 'Don't worry, the students are already waiting by the door.'",
+                question: "Which plural form correctly fills the blank?",
+                options: [
+                    "A) childs",
+                    "B) childrens",
+                    "C) childes",
+                    "D) children",
+                    "E) child"
+                ],
+                correct: 3, // D
+                explanation: "'Children' is the correct irregular plural form of 'child'."
+            },
+            {
+                id: 9,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Short Scenario:<br>After hiking up the steep rocky mountain trail for five hours, both of my _____ were completely sore and covered in dust.",
+                question: "Choose the correct irregular plural noun:",
+                options: [
+                    "A) foots",
+                    "B) feet",
+                    "C) feets",
+                    "D) footes",
+                    "E) feetes"
+                ],
+                correct: 1, // B
+                explanation: "The plural of 'foot' is 'feet'. We do not add '-s' or '-es' to 'feet'."
+            },
+            {
+                id: 10,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Dialogue",
+                context: "Dialogue at the Dental Clinic:<br><strong>Dentist:</strong> 'If you brush twice a day, you will keep your _____ strong and healthy for years.'<br><strong>Patient:</strong> 'Thank you, doctor! I will follow your advice.'",
+                question: "Select the correct plural form for 'tooth':",
+                options: [
+                    "A) tooths",
+                    "B) teeths",
+                    "C) teeth",
+                    "D) toothes",
+                    "E) teethes"
+                ],
+                correct: 2, // C
+                explanation: "The irregular plural form of 'tooth' is 'teeth'."
+            },
+            {
+                id: 11,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Short Scenario:<br>The park keeper noticed a flock of noisy _____ flying across the lake before landing gracefully on the wet grass.",
+                question: "Which noun correctly represents the plural of 'goose'?",
+                options: [
+                    "A) gooses",
+                    "B) geese",
+                    "C) geeses",
+                    "D) goosies",
+                    "E) goosess"
+                ],
+                correct: 1, // B
+                explanation: "The irregular plural form of 'goose' is 'geese'."
+            },
+            {
+                id: 12,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Dialogue",
+                context: "Short Dialogue:<br><strong>Warehouse Manager:</strong> 'We need to set traps immediately! I saw two tiny gray _____ running behind the food storage boxes.'<br><strong>Worker:</strong> 'I will set up the traps right away.'",
+                question: "Choose the correct plural form of 'mouse':",
+                options: [
+                    "A) mouses",
+                    "B) mices",
+                    "C) mice",
+                    "D) meese",
+                    "E) mousies"
+                ],
+                correct: 2, // C
+                explanation: "The irregular plural form of 'mouse' (the animal) is 'mice'."
+            },
+            {
+                id: 13,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Short Scenario:<br>During late October, thousands of golden and red _____ fall gently from the branches, covering the forest floor.",
+                question: "Select the correct plural spelling for 'leaf':",
+                options: [
+                    "A) leafs",
+                    "B) leafes",
+                    "C) leaves",
+                    "D) leavs",
+                    "E) leafss"
+                ],
+                correct: 2, // C
+                explanation: "Nouns ending in '-f' like 'leaf' form their plural by dropping '-f' and adding '-ves' $\\rightarrow$ 'leaves'."
+            },
+            {
+                id: 14,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Dialogue",
+                context: "Short Dialogue:<br><strong>Biographer:</strong> 'Her new documentary explores the remarkable _____ of brave paramedics working in emergency rooms.'<br><strong>Viewer:</strong> 'It sounds like a truly inspiring story.'",
+                question: "Choose the correct plural form for 'life':",
+                options: [
+                    "A) lifes",
+                    "B) lives",
+                    "C) livees",
+                    "D) lifess",
+                    "E) lifs"
+                ],
+                correct: 1, // B
+                explanation: "'Life' ends in '-fe'. To form the plural, change '-fe' to '-ves' $\\rightarrow$ 'lives'."
+            },
+            {
+                id: 15,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Kitchen Safety Briefing:<br>The chef instructed the kitchen assistants to keep all sharp steel _____ inside the protective wooden block when not in use.",
+                question: "What is the grammatically correct plural form of 'knife'?",
+                options: [
+                    "A) knifes",
+                    "B) knifess",
+                    "C) knives",
+                    "D) knivs",
+                    "E) knifees"
+                ],
+                correct: 2, // C
+                explanation: "The noun 'knife' ends in '-fe', so its plural form is 'knives'."
+            },
+            {
+                id: 16,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Nature Documentary Excerpt:<br>During the harsh winter months, a pack of hungry _____ was spotted hunting together in the deep snow of the national park.",
+                question: "Select the correct plural form of 'wolf':",
+                options: [
+                    "A) wolfs",
+                    "B) wolves",
+                    "C) wolfes",
+                    "D) wolvies",
+                    "E) wolfss"
+                ],
+                correct: 1, // B
+                explanation: "The noun 'wolf' ends in '-f', which changes to '-ves' in the plural $\\rightarrow$ 'wolves'."
+            },
+            {
+                id: 17,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Dialogue",
+                context: "Short Dialogue:<br><strong>Fisherman:</strong> 'Look at the clear water! I can see dozens of colorful _____ swimming around the rocks.'<br><strong>Tourist:</strong> 'Wow, they move so fast!'",
+                question: "Choose the correct plural noun form for 'fish' in this context:",
+                options: [
+                    "A) fisheses",
+                    "B) fish",
+                    "C) fishs",
+                    "D) fishies",
+                    "E) fishers"
+                ],
+                correct: 1, // B
+                explanation: "The standard plural form of 'fish' when referring to multiple individual fish in general contexts is 'fish' (unchanged)."
+            },
+            {
+                id: 18,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Farm Inspection Report:<br>The green pasture was peaceful as fifty grazing _____ wandered across the hill while the shepherd watched them closely.",
+                question: "Which option provides the correct plural form for 'sheep'?",
+                options: [
+                    "A) sheeps",
+                    "B) sheepes",
+                    "C) sheep",
+                    "D) sheepies",
+                    "E) shoop"
+                ],
+                correct: 2, // C
+                explanation: "The noun 'sheep' remains identical in both singular and plural forms $\\rightarrow$ 'sheep'."
+            },
+            {
+                id: 19,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Travel Preparation Scenario:<br>Before embarking on the long mountain hike, all participants adjusted their heavy _____ to ensure proper weight distribution.",
+                question: "Select the correct regular plural form of 'backpack':",
+                options: [
+                    "A) backpackes",
+                    "B) backpacks",
+                    "C) backpackies",
+                    "D) backpack",
+                    "E) backpacken"
+                ],
+                correct: 1, // B
+                explanation: "'Backpack' is a regular noun. It forms its plural by adding a simple '-s' $\\rightarrow$ 'backpacks'."
+            },
+            {
+                id: 20,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Park Rest Area Description:<br>After walking for miles, tired travelers sat down on the comfortable wooden _____ situated along the scenic riverbank.",
+                question: "Choose the correct regular plural form of 'bench':",
+                options: [
+                    "A) benchs",
+                    "B) benches",
+                    "C) benchies",
+                    "D) bench",
+                    "E) benchess"
+                ],
+                correct: 1, // B
+                explanation: "Nouns ending in '-ch' (like 'bench') require '-es' to form the plural $\\rightarrow$ 'benches'."
+            },
+            {
+                id: 21,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Photography Workshop:<br>The instructor praised the students for taking high-quality _____ of the landscape during the golden sunset hour.",
+                question: "Which is the correct plural form of 'photo'?",
+                options: [
+                    "A) photoes",
+                    "B) photos",
+                    "C) photoies",
+                    "D) photoss",
+                    "E) photose"
+                ],
+                correct: 1, // B
+                explanation: "Abbreviated words like 'photo' (photograph) take only '-s' $\\rightarrow$ 'photos'."
+            },
+            {
+                id: 22,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Dialogue",
+                context: "Short Dialogue:<br><strong>Traveler:</strong> 'How many _____ will it take us to reach the mountain peak?'<br><strong>Guide:</strong> 'If we maintain a steady pace, it will take roughly three hours.'",
+                question: "Select the correct regular plural noun to complete the sentence:",
+                options: [
+                    "A) hour",
+                    "B) houres",
+                    "C) hours",
+                    "D) houries",
+                    "E) hourse"
+                ],
+                correct: 2, // C
+                explanation: "'Hour' is a regular countable noun that forms its plural by adding '-s' $\\rightarrow$ 'hours'."
+            },
+            {
+                id: 23,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Countryside Vacation Description:<br>At the foot of the snow-capped _____, small wooden cabins offer warm shelter to winter travelers.",
+                question: "Which option correctly forms the plural of 'mountain'?",
+                options: [
+                    "A) mountains",
+                    "B) mountaines",
+                    "C) mountainies",
+                    "D) mountain",
+                    "E) mountainss"
+                ],
+                correct: 0, // A
+                explanation: "'Mountain' is a standard regular noun requiring an '-s' suffix $\\rightarrow$ 'mountains'."
+            },
+            {
+                id: 24,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Harvest Festival Announcement:<br>Local _____ are invited to display their freshest organic fruits and wooden crafts at the annual weekend fair.",
+                question: "Choose the correct regular plural form of 'farmer':",
+                options: [
+                    "A) farmeres",
+                    "B) farmers",
+                    "C) farmeries",
+                    "D) farmmen",
+                    "E) farmerss"
+                ],
+                correct: 1, // B
+                explanation: "The regular plural of 'farmer' is formed simply by adding '-s' $\\rightarrow$ 'farmers'."
+            },
+            {
+                id: 25,
+                part: "Part II",
+                topic: "Plural Nouns",
+                bloom: "Application in Context",
+                context: "Resort Accommodation Brochure:<br>All vacation _____ feature private balconies, rustic fireplaces, and beautiful panoramic views of the valley.",
+                question: "Select the correct plural form of 'cabin':",
+                options: [
+                    "A) cabines",
+                    "B) cabins",
+                    "C) cabinies",
+                    "D) cabiness",
+                    "E) cabin"
+                ],
+                correct: 1, // B
+                explanation: "'Cabin' is a regular countable noun and becomes 'cabins' in plural."
+            },
+
+            // PART III: QUANTIFIERS IN CONTEXT (15 Questions: Q26 - Q40)
+            {
+                id: 26,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Question Context",
+                context: "Dialogue at the Tourism Information Desk:<br><strong>Visitor:</strong> 'Excuse me, are there _____ historical bridges to visit near this mountain village?'<br><strong>Agent:</strong> 'Yes! There are at least five famous bridges within walking distance.'",
+                question: "Choose the grammatically correct quantifier for the plural countable noun 'bridges':",
+                options: [
+                    "A) much",
+                    "B) little",
+                    "C) many",
+                    "D) a little",
+                    "E) much of"
+                ],
+                correct: 2, // C
+                explanation: "'Bridges' is a plural countable noun. In questions asking about quantity with countable nouns, we use 'many'."
+            },
+            {
+                id: 27,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Positive Context",
+                context: "Scenario in the Kitchen:<br>We don't need to buy extra bottled beverage for the outdoor picnic because there is still _____ fresh juice left in the refrigerator pitcher.",
+                question: "Select the correct quantifier for the uncountable noun 'juice' indicating a small positive amount:",
+                options: [
+                    "A) a few",
+                    "B) many",
+                    "C) few",
+                    "D) a little",
+                    "E) several"
+                ],
+                correct: 3, // D
+                explanation: "'Juice' is an uncountable noun. 'A little' means 'some' (a small positive quantity)."
+            },
+            {
+                id: 28,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Scarcity Context",
+                context: "Dialogue before departure:<br><strong>Hiker:</strong> 'Should we hurry to the shuttle bus stop?'<br><strong>Guide:</strong> 'Yes! We have very _____ time left before the final coach leaves the valley!'",
+                question: "Which quantifier correctly completes the sentence with the uncountable noun 'time' to indicate extreme scarcity?",
+                options: [
+                    "A) few",
+                    "B) little",
+                    "C) many",
+                    "D) a few",
+                    "E) several"
+                ],
+                correct: 1, // B
+                explanation: "'Time' is uncountable. 'Very little' emphasizes a scarce or insufficient amount."
+            },
+            {
+                id: 29,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Small Group Context",
+                context: "Scenario at the Organic Farm:<br>Although it rained heavily this morning, _____ enthusiastic tourists still visited the sheep barn to take photos.",
+                question: "Choose the correct quantifier for the plural countable noun 'tourists' (meaning 'a small number / some'):",
+                options: [
+                    "A) a little",
+                    "B) much",
+                    "C) a few",
+                    "D) little",
+                    "E) any"
+                ],
+                correct: 2, // C
+                explanation: "'Tourists' is a plural countable noun. 'A few' expresses a small positive number."
+            },
+            {
+                id: 30,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Question Context",
+                context: "Dialogue at the Mountain Cafe:<br><strong>Customer:</strong> 'How _____ sugar did you add to this hot cinnamon tea?'<br><strong>Barista:</strong> 'Just one small spoonful, as you requested!'",
+                question: "Select the correct quantifier for the uncountable noun 'sugar' in a direct question:",
+                options: [
+                    "A) many",
+                    "B) much",
+                    "C) few",
+                    "D) a few",
+                    "E) several"
+                ],
+                correct: 1, // B
+                explanation: "'Sugar' is an uncountable noun. We ask 'How much...?' when inquiring about uncountable amounts."
+            },
+            {
+                id: 31,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Scarcity Context",
+                context: "Dialogue between hikers:<br><strong>Sam:</strong> 'Did you spot any wild wolves on the ridge today?'<br><strong>Lucas:</strong> 'Unfortunately, _____ travelers ever see them because wolves avoid human interaction.'",
+                question: "Choose the correct quantifier to express that almost NO people see the wolves (countable negative tone):",
+                options: [
+                    "A) little",
+                    "B) a little",
+                    "C) few",
+                    "D) much",
+                    "E) a lot"
+                ],
+                correct: 2, // C
+                explanation: "'Travelers' is a plural countable noun. 'Few' without 'a' means 'not many / almost none'."
+            },
+            {
+                id: 32,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Question Context",
+                context: "Dialogue at the Hotel Front Desk:<br><strong>Manager:</strong> 'Do we have _____ milk remaining for the breakfast coffee service?'<br><strong>Staff:</strong> 'No, we are almost out! I will purchase more immediately.'",
+                question: "Which quantifier best fits a question regarding quantity of uncountable liquid 'milk'?",
+                options: [
+                    "A) many",
+                    "B) much",
+                    "C) few",
+                    "D) a few",
+                    "E) several"
+                ],
+                correct: 1, // B
+                explanation: "'Milk' is an uncountable noun. We use 'much' in questions and negative statements with uncountable nouns."
+            },
+            {
+                id: 33,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Positive Context",
+                context: "Scenario in the Farm Shop:<br><strong>Customer:</strong> 'I have two apples in my basket, but I would like to purchase _____ more for my children.'",
+                question: "Select the correct quantifier for the plural countable noun 'apples':",
+                options: [
+                    "A) a little",
+                    "B) little",
+                    "C) a few",
+                    "D) much",
+                    "E) a much"
+                ],
+                correct: 2, // C
+                explanation: "'Apples' is countable and plural. 'A few' indicates a small additional positive quantity."
+            },
+            {
+                id: 34,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Minimal Context",
+                context: "Cooking Demonstration:<br><strong>Chef:</strong> 'Add just _____ salt to the vegetable soup to enhance its natural flavor without making it too salty.'",
+                question: "Choose the correct quantifier for the uncountable mass noun 'salt':",
+                options: [
+                    "A) a few",
+                    "B) few",
+                    "C) a little",
+                    "D) many",
+                    "E) several"
+                ],
+                correct: 2, // C
+                explanation: "'Salt' is an uncountable noun. 'A little' signifies a small, positive amount."
+            },
+            {
+                id: 35,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Question Context",
+                context: "Dialogue at the Photo Gallery:<br><strong>Art Collector:</strong> 'How _____ photos did you take during your expedition in the valley?'<br><strong>Photographer:</strong> 'I took nearly three hundred shots!'",
+                question: "Select the correct quantifier for the plural countable noun 'photos':",
+                options: [
+                    "A) much",
+                    "B) many",
+                    "C) little",
+                    "D) a little",
+                    "E) much of"
+                ],
+                correct: 1, // B
+                explanation: "We use 'How many...?' with plural countable nouns like 'photos'."
+            },
+            {
+                id: 36,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Absence Context",
+                context: "Weather Forecast Statement:<br>'There is _____ hope of clear skies today as heavy gray clouds cover the entire valley.'",
+                question: "Which quantifier expresses almost NO hope (uncountable noun 'hope' with negative tone)?",
+                options: [
+                    "A) few",
+                    "B) a few",
+                    "C) little",
+                    "D) many",
+                    "E) several"
+                ],
+                correct: 2, // C
+                explanation: "'Hope' is an uncountable noun. 'Little' (without 'a') emphasizes a near total absence of something."
+            },
+            {
+                id: 37,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Small Positive Context",
+                context: "Camping Scenario:<br>Before going to bed inside the cabin, we lit _____ candles to illuminate the room softly.",
+                question: "Choose the correct quantifier for the plural countable noun 'candles':",
+                options: [
+                    "A) a little",
+                    "B) little",
+                    "C) a few",
+                    "D) much",
+                    "E) much of"
+                ],
+                correct: 2, // C
+                explanation: "'Candles' is a plural countable noun. 'A few' means a small positive number of candles."
+            },
+            {
+                id: 38,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Interrogative Context",
+                context: "Dialogue at the Visitor Center:<br><strong>Tourist:</strong> 'Is there _____ luggage storage available near the station?'<br><strong>Agent:</strong> 'Unfortunately, we don't have much space left today.'",
+                question: "Select the correct quantifier for the uncountable noun 'luggage' / 'storage space':",
+                options: [
+                    "A) many",
+                    "B) few",
+                    "C) much",
+                    "D) a few",
+                    "E) several"
+                ],
+                correct: 2, // C
+                explanation: "'Luggage' and 'space' are uncountable. We use 'much' in questions and negative contexts."
+            },
+            {
+                id: 39,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Countable Scarcity Context",
+                context: "Historical Lecture Excerpt:<br>'Two centuries ago, very _____ bridges existed across this river, making trade between villages extremely difficult.'",
+                question: "Which quantifier correctly completes the sentence with the plural countable noun 'bridges' to indicate severe scarcity?",
+                options: [
+                    "A) little",
+                    "B) a little",
+                    "C) few",
+                    "D) much",
+                    "E) a much"
+                ],
+                correct: 2, // C
+                explanation: "'Bridges' is a plural countable noun. 'Very few' emphasizes that almost no bridges existed."
+            },
+            {
+                id: 40,
+                part: "Part III",
+                topic: "Quantifiers",
+                bloom: "Uncountable Positive Portion Context",
+                context: "Trail Advice from Ranger:<br>'Make sure you drink _____ water every twenty minutes to stay hydrated while hiking up the mountain trail.'",
+                question: "Select the correct quantifier for the uncountable noun 'water' (meaning 'a small positive portion'):",
+                options: [
+                    "A) a few",
+                    "B) few",
+                    "C) a little",
+                    "D) many",
+                    "E) several"
+                ],
+                correct: 2, // C
+                explanation: "'Water' is an uncountable noun. 'A little' means a small positive quantity ('some water')."
+            }
+        ];
+
+        // User State Tracking
+        let currentQuestionIdx = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let checkedStatus = new Array(quizData.length).fill(false);
+
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+        const gridPart1 = document.getElementById('grid-part-1');
+        const gridPart2 = document.getElementById('grid-part-2');
+        const gridPart3 = document.getElementById('grid-part-3');
+        const progressText = document.getElementById('progress-text');
+        const mainProgressBar = document.getElementById('main-progress-bar');
+        
+        const readingStoryBox = document.getElementById('reading-story-box');
+        const quizView = document.getElementById('quiz-view');
+        const quizCard = document.getElementById('quiz-card');
+        const reportScreen = document.getElementById('report-screen');
+        
+        const questionBadge = document.getElementById('question-badge');
+        const topicBadge = document.getElementById('topic-badge');
+        const bloomBadge = document.getElementById('bloom-badge');
+        const contextBox = document.getElementById('context-box');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackMessage = document.getElementById('feedback-message');
+
+        const prevBtn = document.getElementById('prev-btn');
+        const checkBtn = document.getElementById('check-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finishQuizBtn = document.getElementById('finish-quiz-btn');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        // Theme Toggle Handler
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Sidebar Toggle
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-ml-72');
+        });
+
+        // Initialize App
+        function initApp() {
+            buildNavGrids();
+            loadQuestion(0);
+            updateProgress();
+        }
+
+        // Build Question Navigation Grid
+        function buildNavGrids() {
+            gridPart1.innerHTML = '';
+            gridPart2.innerHTML = '';
+            gridPart3.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${idx}`;
+                btn.className = `w-full aspect-square text-xs font-semibold rounded-lg border flex items-center justify-center transition-all ${getNavBtnStyle(idx)}`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+
+                if (idx < 5) {
+                    gridPart1.appendChild(btn);
+                } else if (idx < 25) {
+                    gridPart2.appendChild(btn);
+                } else {
+                    gridPart3.appendChild(btn);
+                }
+            });
+        }
+
+        function getNavBtnStyle(idx) {
+            const isCurrent = idx === currentQuestionIdx;
+            const isChecked = checkedStatus[idx];
+            const userAnswer = userAnswers[idx];
+            const q = quizData[idx];
+
+            let base = isCurrent ? 'ring-2 ring-brand-500 ring-offset-1 dark:ring-offset-slate-800 ' : '';
+
+            if (isChecked) {
+                if (userAnswer === q.correct) {
+                    return base + 'bg-emerald-500 text-white border-emerald-600';
+                } else {
+                    return base + 'bg-rose-500 text-white border-rose-600';
+                }
+            } else if (userAnswer !== null) {
+                return base + 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-700';
+            } else {
+                return base + 'bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600';
+            }
+        }
+
+        function updateNavStyles() {
+            quizData.forEach((_, idx) => {
+                const btn = document.getElementById(`nav-btn-${idx}`);
+                if (btn) {
+                    btn.className = `w-full aspect-square text-xs font-semibold rounded-lg border flex items-center justify-center transition-all ${getNavBtnStyle(idx)}`;
+                }
+            });
+        }
+
+        // Load Question View
+        function loadQuestion(idx) {
+            currentQuestionIdx = idx;
+            const q = quizData[idx];
+
+            // Hide Report, Show Quiz
+            reportScreen.classList.add('hidden');
+            quizView.classList.remove('hidden');
+
+            // CRITICAL FEATURE: FIX & SHOW READING TEXT BOX ONLY FOR QUESTIONS 1-5 (PART I)
+            if (idx < 5) {
+                readingStoryBox.classList.remove('hidden');
+            } else {
+                readingStoryBox.classList.add('hidden');
+            }
+
+            // Badges & Meta
+            questionBadge.innerText = `Question ${q.id} of ${quizData.length}`;
+            topicBadge.innerText = `${q.part}: ${q.topic}`;
+            bloomBadge.innerText = q.bloom || 'Grammar Context';
+
+            // Context Box
+            if (q.context) {
+                contextBox.innerHTML = q.context;
+                contextBox.classList.remove('hidden');
+            } else {
+                contextBox.classList.add('hidden');
+            }
+
+            // Question Text
+            questionText.innerText = q.question;
+
+            // Render Options
+            optionsContainer.innerHTML = '';
+            const isChecked = checkedStatus[idx];
+            const selectedOption = userAnswers[idx];
+
+            q.options.forEach((optText, optIdx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full text-left p-4 rounded-xl border text-sm sm:text-base font-medium transition-all flex items-center justify-between ${getOptionStyle(idx, optIdx)}`;
+                
+                optBtn.innerHTML = `
+                    <span>${optText}</span>
+                    <span id="opt-icon-${optIdx}">
+                        ${getOptionIcon(idx, optIdx)}
+                    </span>
+                `;
+
+                if (!isChecked) {
+                    optBtn.onclick = () => selectOption(optIdx);
+                }
+
+                optionsContainer.appendChild(optBtn);
+            });
+
+            // Feedback Box Handling
+            if (isChecked) {
+                feedbackBox.classList.remove('hidden');
+                if (selectedOption === q.correct) {
+                    feedbackBox.className = "p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 mb-2";
+                    feedbackIcon.className = "fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 text-xl mt-0.5";
+                    feedbackTitle.innerText = "Correct Answer!";
+                } else {
+                    feedbackBox.className = "p-4 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 mb-2";
+                    feedbackIcon.className = "fa-solid fa-circle-xmark text-rose-600 dark:text-rose-400 text-xl mt-0.5";
+                    feedbackTitle.innerText = "Incorrect Answer";
+                }
+                feedbackMessage.innerText = q.explanation;
+            } else {
+                feedbackBox.classList.add('hidden');
+            }
+
+            // Button state updates
+            prevBtn.disabled = (idx === 0);
+            prevBtn.classList.toggle('opacity-50', idx === 0);
+            prevBtn.classList.toggle('cursor-not-allowed', idx === 0);
+
+            nextBtn.disabled = (idx === quizData.length - 1);
+            nextBtn.classList.toggle('opacity-50', idx === quizData.length - 1);
+            nextBtn.classList.toggle('cursor-not-allowed', idx === quizData.length - 1);
+
+            updateNavStyles();
+        }
+
+        function getOptionStyle(qIdx, optIdx) {
+            const isChecked = checkedStatus[qIdx];
+            const selectedOption = userAnswers[qIdx];
+            const q = quizData[qIdx];
+
+            if (isChecked) {
+                if (optIdx === q.correct) {
+                    return 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-500 text-emerald-900 dark:text-emerald-100 font-semibold';
+                }
+                if (optIdx === selectedOption && selectedOption !== q.correct) {
+                    return 'bg-rose-100 dark:bg-rose-950/80 border-rose-500 text-rose-900 dark:text-rose-100 font-semibold';
+                }
+                return 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 text-slate-400 opacity-60';
+            } else {
+                if (optIdx === selectedOption) {
+                    return 'bg-brand-50 dark:bg-brand-950/60 border-brand-500 text-brand-900 dark:text-brand-100 shadow-sm';
+                }
+                return 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50';
+            }
+        }
+
+        function getOptionIcon(qIdx, optIdx) {
+            const isChecked = checkedStatus[qIdx];
+            const selectedOption = userAnswers[qIdx];
+            const q = quizData[qIdx];
+
+            if (isChecked) {
+                if (optIdx === q.correct) {
+                    return '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 text-lg"></i>';
+                }
+                if (optIdx === selectedOption && selectedOption !== q.correct) {
+                    return '<i class="fa-solid fa-circle-xmark text-rose-600 dark:text-rose-400 text-lg"></i>';
+                }
+            } else if (optIdx === selectedOption) {
+                return '<i class="fa-solid fa-dot-circle text-brand-600 dark:text-brand-400 text-lg"></i>';
+            }
+            return '<i class="fa-regular fa-circle text-slate-300 dark:text-slate-600 text-lg"></i>';
+        }
+
+        function selectOption(optIdx) {
+            userAnswers[currentQuestionIdx] = optIdx;
+            loadQuestion(currentQuestionIdx);
+            updateProgress();
+        }
+
+        function checkCurrentQuestion() {
+            if (userAnswers[currentQuestionIdx] === null) {
+                alert("Please select an answer option before clicking 'Check'.");
+                return;
+            }
+            checkedStatus[currentQuestionIdx] = true;
+            loadQuestion(currentQuestionIdx);
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        // Navigation Handlers
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIdx > 0) loadQuestion(currentQuestionIdx - 1);
+        });
+
+        checkBtn.addEventListener('click', () => {
+            checkCurrentQuestion();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIdx < quizData.length - 1) loadQuestion(currentQuestionIdx + 1);
+        });
+
+        finishQuizBtn.addEventListener('click', () => {
+            showReport();
+        });
+
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const pct = (answeredCount / quizData.length) * 100;
+            progressText.innerText = `${answeredCount} / ${quizData.length} Answered`;
+            mainProgressBar.style.width = `${pct}%`;
+        }
+
+        // Generate Comprehensive End-of-Quiz Report
+        function showReport() {
+            quizView.classList.add('hidden');
+            readingStoryBox.classList.add('hidden');
+            reportScreen.classList.remove('hidden');
+
+            let totalCorrect = 0;
+            let part1Correct = 0, part2Correct = 0, part3Correct = 0;
+
+            quizData.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                if (userAns === q.correct) {
+                    totalCorrect++;
+                    if (idx < 5) part1Correct++;
+                    else if (idx < 25) part2Correct++;
+                    else part3Correct++;
+                }
+            });
+
+            const totalScorePct = Math.round((totalCorrect / quizData.length) * 100);
+            const part1Pct = Math.round((part1Correct / 5) * 100);
+            const part2Pct = Math.round((part2Correct / 20) * 100);
+            const part3Pct = Math.round((part3Correct / 15) * 100);
+
+            reportScreen.innerHTML = `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 sm:p-8">
+                    <div class="text-center pb-6 border-b border-slate-100 dark:border-slate-700 mb-6">
+                        <span class="bg-brand-100 text-brand-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Final Results</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-2">Performance Assessment Report</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">High School Level A2-B2 English Mastery Evaluation</p>
+                    </div>
+
+                    <!-- Main Score Card -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center">
+                            <span class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Overall Accuracy</span>
+                            <span class="text-4xl sm:text-5xl font-extrabold ${totalScorePct >= 70 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-500'}">${totalScorePct}%</span>
+                            <span class="text-xs text-slate-400 mt-2">${totalCorrect} out of ${quizData.length} questions correct</span>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-center space-y-3">
+                            <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200">Category Summary</h4>
+                            <div>
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span>Part I: Reading Comprehension</span>
+                                    <span>${part1Correct}/5 (${part1Pct}%)</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-blue-500 h-2" style="width: ${part1Pct}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span>Part II: Plural Nouns</span>
+                                    <span>${part2Correct}/20 (${part2Pct}%)</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-indigo-500 h-2" style="width: ${part2Pct}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span>Part III: Quantifiers</span>
+                                    <span>${part3Correct}/15 (${part3Pct}%)</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-purple-500 h-2" style="width: ${part3Pct}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adaptive Review Recommendations -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Targeted Review Recommendations</h3>
+                        <div class="space-y-3">
+                            ${getRecommendationsHTML(part1Pct, part2Pct, part3Pct)}
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="text-center pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="resumeQuiz()" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-xl text-sm transition">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Return to Quiz Questions
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getRecommendationsHTML(p1, p2, p3) {
+            let html = '';
+            let needsRev = false;
+
+            if (p1 < 70) {
+                needsRev = true;
+                html += `
+                    <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs sm:text-sm text-amber-900 dark:text-amber-200 flex items-start space-x-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+                        <div>
+                            <strong>Review Recommended: Reading Comprehension (${p1}%)</strong>
+                            <p class="mt-1">Practice analyzing contextual details, inference questions, and identifying tone or author's purpose in narrative texts without relying on direct word matching.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (p2 < 70) {
+                needsRev = true;
+                html += `
+                    <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs sm:text-sm text-amber-900 dark:text-amber-200 flex items-start space-x-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+                        <div>
+                            <strong>Review Recommended: Plural Nouns (${p2}%)</strong>
+                            <p class="mt-1">Review core irregular plural transformations: internal vowel changes (<em>man→men, child→children, foot→feet</em>), <em>-f/-fe → -ves</em> endings (<em>knife→knives, leaf→leaves</em>), and unchanged forms (<em>sheep, fish</em>).</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (p3 < 70) {
+                needsRev = true;
+                html += `
+                    <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs sm:text-sm text-amber-900 dark:text-amber-200 flex items-start space-x-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
+                        <div>
+                            <strong>Review Recommended: Quantifiers (${p3}%)</strong>
+                            <p class="mt-1">Focus on distinguishing countable plurals (<em>many, few, a few</em>) from uncountable mass nouns (<em>much, little, a little</em>). Remember that 'a few / a little' imply positive presence ('some'), whereas 'few / little' imply scarcity ('almost none').</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (!needsRev) {
+                html = `
+                    <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs sm:text-sm text-emerald-900 dark:text-emerald-200 flex items-start space-x-3">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-lg mt-0.5"></i>
+                        <div>
+                            <strong>Excellent Work!</strong>
+                            <p class="mt-1">You demonstrated strong proficiency across all three categories (Reading Comprehension, Plural Nouns, and Quantifiers) above the 70% benchmark!</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return html;
+        }
+
+        function resumeQuiz() {
+            reportScreen.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            loadQuestion(currentQuestionIdx);
+        }
+
+        // Initialize on Load
+        window.onload = initApp;
+    </script>
+</body>
+</html>
